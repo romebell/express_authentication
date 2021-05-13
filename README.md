@@ -35,7 +35,7 @@ Express authentication template using Passport + Flash messages + custom middlew
 | GET | /auth/logout | auth.js | Removes session info |
 | GET | /profile | server.js | Regular User Profile |
 
-## `2` Fork & Clone Project & Install Dependencies
+## `1` Fork & Clone Project & Install Dependencies
 `1` The first thing that we are going to do is `fork` and `clone`
 
 `2` Now we are going to install the current dependencies that are listed inside of `package.json`
