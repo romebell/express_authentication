@@ -3,7 +3,8 @@ const express = require('express');
 const layouts = require('express-ejs-layouts');
 const app = express();
 const flash = require('connect-flash');
-const sesion = require('express-session');
+const session = require('express-session');
+const passport = require('./config/ppConfig');
 
 const SECRET_SESSION = process.env.SECRET_SESSION;
 
@@ -26,6 +27,9 @@ app.use((req, res, next) => {
   res.locals.currentUser = req.user;
   next();
 });
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.get('/', (req, res) => {
   res.render('index');
