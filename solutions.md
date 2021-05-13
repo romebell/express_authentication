@@ -5,6 +5,8 @@
 ```js
 'use strict';
 
+const bcrypt = require('bcrypt');
+
 const {
   Model
 } = require('sequelize');
