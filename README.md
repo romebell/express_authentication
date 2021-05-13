@@ -256,7 +256,7 @@ user.prototype.toJSON = function() {
 }
 ```
 
-`5` Verify that model looks like the following code snippet ( [here](https://github.com/romebell/express_auth_412_prep/blob/main/solutions.md#1-userjs) )
+`5` Verify that model looks like the following code snippet ( [here](https://github.com/romebell/express_authentication/blob/main/solutions.md#1-userjs) )
 
 `6` Do a migration
 
@@ -643,7 +643,7 @@ The purpose of building out this logic will be to display on the page whether or
 <% } %>
 ```
 
-`2` Double check **`layout.ejs`** to make sure it looks like ( [this]() )
+`2` Double check **`layout.ejs`** to make sure it looks like ( [this](https://github.com/romebell/express_authentication/blob/main/solutions.md#2-layoutejs) )
 
 ## `14` Add Profile View and Controller
 The purpose of this step is to add a view and controller for a user to see their information on a profile page. We will to build a GET route to `/profile` that will send the user data to the `profile.ejs` to be displayed whenever a user logs in.
