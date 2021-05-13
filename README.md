@@ -414,7 +414,7 @@ app.use(passport.session());         // Add a session
 `3` Import the `ppConfig.js` file inside of `auth.js` located in the **`controllers`** folder
 
 ```js
-const passport = require('./config/ppConfig');
+const passport = require('../config/ppConfig');
 ```
 
 `4` Make *commit* message
@@ -514,8 +514,12 @@ The form that the data will be submitted from:
   <input type="submit" value="Sign up">
 </form>
 ```
+`1` Import **`database`** into `auth.js` file
+```js
+const db = require('../models');
+```
 
-`1` Create a **`post`** route for signup
+`2` Create a **`post`** route for signup
 
 ```js
 router.post('/signup', async (req, res) => {
@@ -551,9 +555,9 @@ router.post('/signup', async (req, res) => {
 });
 ```
 
-`2` Run **`mocha`** to see how many tests passed
+`3` Run **`mocha`** to see how many tests passed
 
-`3` Make *commit* message
+`4` Make *commit* message
 ```text
 git add .
 git commit -m "auth: add signup post route"
