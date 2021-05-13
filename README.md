@@ -78,7 +78,7 @@ npm install
 `3` We need to install some packages that will be used for `authentication`. Those are the following packages:
 
 ```text
-npm install bcrypt connect-flash passport passport-local express-sessions method-override
+npm install bcrypt connect-flash passport passport-local express-session method-override
 ```
 -  [bcrypt](https://www.npmjs.com/package/bcrypt): A library to help you hash passwords. ( [wikipedia](https://en.wikipedia.org/wiki/Bcrypt) ) 
     - Blowfish has a 64-bit block size and a variable key length from 32 bits up to 448 bits.
