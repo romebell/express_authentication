@@ -404,11 +404,27 @@ After making local strategy for passport, we now need to import the **`ppConfig.
 const passport = require('./config/ppConfig');
 ```
 
-`2` Initialize passport and passport session, invoke it, and pass through as middleware. Place this under the current middleware
+`2` Initialize passport and passport session, invoke it, and pass through as middleware. Place this between the middleware that invokes **`flash`** and the middleware that is using **`res.locals`**.
 
 ```js
 app.use(passport.initialize());      // Initialize passport
 app.use(passport.session());         // Add a session
+```
+
+It should be placed on the server like so:
+
+```js
+app.use(flash());
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.use((req, res, next) => {
+  console.log(res.locals);
+  res.locals.alerts = req.flash();
+  res.locals.currentUser = req.user;
+  next();
+});
 ```
 
 `3` Import the `ppConfig.js` file inside of `auth.js` located in the **`controllers`** folder
@@ -653,7 +669,7 @@ The purpose of this step is to add a view and controller for a user to see their
 `1` Create a GET route to `/profile` and include `isLoggedIn` middleware to check to see if user is logged in beforehand inside of `server.js`
 
 ```js
-// Add this below /auth controllers
+// Add this above /auth controllers
 app.get('/profile', isLoggedIn, (req, res) => {
   const { id, name, email } = req.user.get(); 
   res.render('profile', { id, name, email });
