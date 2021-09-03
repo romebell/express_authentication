@@ -145,10 +145,10 @@ createdb express_auth_dev
 `1` Add `user` model
 
 ```text
-sequelize model:create --name user --attributes name:string,email:string,password:string
+sequelize model:create --name User --attributes name:string,email:string,password:string
 ```
 
-`2` Add **validations** for `user` model
+`2` Add **validations** for `User` model
 
 Validations are used as constraints for a column in a table that requires an entry in the database to follow various rules set in order for that data to be entered into the database.
 
@@ -159,7 +159,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class user extends Model {
+  class User extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -169,7 +169,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   };
-  user.init({
+  User.init({
     name: {
       type: DataTypes.STRING,
       validate: {
@@ -182,7 +182,7 @@ module.exports = (sequelize, DataTypes) => {
     email: {
       type: DataTypes.STRING,
       validate: {
-        isEmail: { // does a boolean check
+        isEmail: {
           msg: 'Invalid email'
         }
       }
@@ -198,7 +198,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
     sequelize,
-    modelName: 'user',
+    modelName: 'User',
   });
 
   return user; // add functions above 
@@ -208,7 +208,7 @@ module.exports = (sequelize, DataTypes) => {
 `3` Make a *commit* message
 ```text
 git add .
-git commit -m "user: Add model and validations
+git commit -m "add: User model and validations
 ```
 
 ## `5` Add Methods to `user` Model to Hash Password, Etc.
@@ -224,7 +224,7 @@ Inside of the user model, add the following hook to hash password
 
 ```js
 // Before a user is created, we are encrypting the password and using hash in its place
-user.addHook('beforeCreate', (pendingUser) => { // pendingUser is user object that gets passed to DB
+User.addHook('beforeCreate', (pendingUser) => { // pendingUser is user object that gets passed to DB
     // Bcrypt is going to hash the password
     let hash = bcrypt.hashSync(pendingUser.password, 12); // hash 12 times
     pendingUser.password = hash; // this will go to the DB
@@ -235,18 +235,18 @@ user.addHook('beforeCreate', (pendingUser) => { // pendingUser is user object th
 
 ```js
  // Check the password on Sign-In and compare it to the hashed password in the DB
-user.prototype.validPassword = function(typedPassword) {
+User.prototype.validPassword = function(typedPassword) {
     let isCorrectPassword = bcrypt.compareSync(typedPassword, this.password); // check to see if password is correct.
 
     return isCorrectPassword;
 }
 ```
 
-`4` Add `toJSON()` method to `user` model that will delete password to prevent from being used on the client
+`4` Add `toJSON()` method to `User` model that will delete password to prevent from being used on the client
 
 ```js
 // return an object from the database of the user without the encrypted password
-user.prototype.toJSON = function() {
+User.prototype.toJSON = function() {
     let userData = this.get(); 
     delete userData.password; // it doesn't delete password from database, only removes it. 
     
@@ -267,7 +267,7 @@ sequelize db:migrate
 `1` Create a `.env` file and place an evironment variable `SECRET_SESSION` with the string of your choice
 
 ```env
-SECRET_SESSION=alldayidreamaboutsecretsession
+SECRET_SESSION=alldayidreamaboutsoftwareengineering
 ```
 
 `2` Add `.env` to .gitignore file
@@ -324,7 +324,7 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 
 // Database
-const db = require('../models');
+const { User } = require('../models');
 ```
 
 `3` Create a new instance of a `LocalStrategy`
@@ -335,7 +335,7 @@ const STRATEGY = new LocalStrategy({
     passwordField: 'password'       // looks for an password field as the password
     }, async (email, password, cb) => {
         try {
-            const user = await db.user.findOne({
+            const user = await User.findOne({
                 where: { email }
             });
 
@@ -365,7 +365,7 @@ passport.serializeUser((user, cb) => {
 ```js
 passport.deserializeUser(async (id, cb) => {
     try {
-        const user = await db.user.findByPk(id);
+        const user = await User.findByPk(id);
 
         if (user) {
             cb(null, user)
@@ -485,10 +485,10 @@ The form that the data will be submitted from:
 ```ejs
 <form action="/auth/login" method="POST">
   <label for="auth-email">Email</label>
-  <input id="auth-email" type="email" name="email">
+  <input id="auth-email" type="email" name="email" required>
 
   <label for="auth-password">Password</label>
-  <input id="auth-password" type="password" name="password">
+  <input id="auth-password" type="password" name="password" required>
 
   <input type="submit" value="Log In">
 </form>
@@ -519,20 +519,20 @@ The form that the data will be submitted from:
 ```ejs
 <form action="/auth/signup" method="POST">
   <label for="new-email">Email</label>
-  <input id="new-email" type="email" name="email">
+  <input id="new-email" type="email" name="email" required>
 
   <label for="new-name">Name</label>
-  <input id="new-name" type="text" name="name">
+  <input id="new-name" type="text" name="name" required>
 
   <label for="new-password">Password</label>
-  <input id="new-password" type="password" name="password">
+  <input id="new-password" type="password" name="password" required>
 
   <input type="submit" value="Sign up">
 </form>
 ```
 `1` Import **`database`** into `auth.js` file
 ```js
-const db = require('../models');
+const { User } = require('../models');
 ```
 
 `2` Create a **`post`** route for signup
@@ -542,7 +542,7 @@ router.post('/signup', async (req, res) => {
   // we now have access to the user info (req.body);
   const { email, name, password } = req.body; // goes and us access to whatever key/value inside of the object
   try {
-    const [user, created] = await db.user.findOrCreate({
+    const [user, created] = await User.findOrCreate({
         where: { email },
         defaults: { name, password }
     });
