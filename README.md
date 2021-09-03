@@ -213,12 +213,12 @@ git commit -m "add: User model and validations
 
 ## `5` Add Methods to `user` Model to Hash Password, Etc.
 
-`1` Import `bcrypt` at the top of `user` model
+`1` Import `bcrypt` at the top of `User` model
 ```js
 const bcrypt = require('bcrypt');
 ```
 
-`2` Create a hook `beforeCreate` to hash **password** inside `user` model before it enters the database
+`2` Create a hook `beforeCreate` to hash **password** inside `User` model before it enters the database
 
 Inside of the user model, add the following hook to hash password
 
@@ -231,7 +231,7 @@ User.addHook('beforeCreate', (pendingUser) => { // pendingUser is user object th
 });  
 ```
 
-`3` Add `validPassword()` method to `user` model that will compare a password entered with the hashed password
+`3` Add `validPassword()` method to `User` model that will compare a password entered with the hashed password
 
 ```js
  // Check the password on Sign-In and compare it to the hashed password in the DB
@@ -360,7 +360,7 @@ passport.serializeUser((user, cb) => {
 });
 ```
 
-`5` Deserialize user to return user if found by id
+`5` Deserialize user and return user if found by `id`
 
 ```js
 passport.deserializeUser(async (id, cb) => {
