@@ -211,7 +211,7 @@ git add .
 git commit -m "add: User model and validations
 ```
 
-## `5` Add Methods to `user` Model to Hash Password, Etc.
+## `5` Add Methods to `User` Model to Hash Password, Etc.
 
 `1` Import `bcrypt` at the top of `User` model
 ```js
