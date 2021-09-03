@@ -142,7 +142,7 @@ createdb express_auth_dev
 
 ## `4` Create `user` Model & Add Validations
 
-`1` Add `user` model
+`1` Add `User` model
 
 ```text
 sequelize model:create --name User --attributes name:string,email:string,password:string
@@ -201,7 +201,7 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'User',
   });
 
-  return user; // add functions above 
+  return User; // add functions above 
 };
 ```
 
