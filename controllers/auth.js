@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const passport = require('../config/ppConfig');
 
-const db = require('../models');
+const { User } = require('../models');
 
 router.get('/signup', (req, res) => {
   res.render('auth/signup');
@@ -29,7 +29,7 @@ router.post('/signup', async (req, res) => {
   const { name, email, password } = req.body;
 
   try {
-    const [user, created] = await db.user.findOrCreate({
+    const [user, created] = await User.findOrCreate({
       where: { email },
       defaults: { name, password }
     });

@@ -1,5 +1,6 @@
-var expect = require('chai').expect;
-var db = require('../models');
+const expect = require('chai').expect;
+const db = require('../models');
+const { User } = require('../models');
 
 before(function(done) {
   db.sequelize.sync({ force: true }).then(function() {
@@ -9,7 +10,7 @@ before(function(done) {
 
 describe('Creating a User', function() {
   it('should create successfully', function(done) {
-    db.user.create({
+    User.create({
       email: 'test@test.co',
       name: 'Muttbuncher',
       password: 'password'
@@ -21,7 +22,7 @@ describe('Creating a User', function() {
   });
 
   it('should throw an error on invalid email addresses', function(done) {
-    db.user.create({
+    User.create({
       email: 'test',
       name: 'Brian',
       password: 'password'
@@ -33,7 +34,7 @@ describe('Creating a User', function() {
   });
 
   it('should throw an error on invalid name', function(done) {
-    db.user.create({
+    User.create({
       email: 'test@test.co',
       name: '',
       password: 'password'
@@ -45,7 +46,7 @@ describe('Creating a User', function() {
   });
 
   it('should throw an error on invalid password', function(done) {
-    db.user.create({
+    User.create({
       email: 'test@test.co',
       name: 'Brian',
       password: 'short'
@@ -57,7 +58,7 @@ describe('Creating a User', function() {
   });
 
   it('should hash the password before save', function(done) {
-    db.user.create({
+    User.create({
       email: 'test@test.co',
       name: 'Muttbuncher',
       password: 'password'
@@ -76,7 +77,7 @@ describe('Creating a User', function() {
 describe('User instance methods', function() {
   describe('validPassword', function() {
     it('should validate a correct password', function(done) {
-      db.user.findOne().then(function(user) {
+      User.findOne().then(function(user) {
         if (user.validPassword('123123123')) {
           done();
         } else {
@@ -88,7 +89,7 @@ describe('User instance methods', function() {
     });
 
     it('should invalidate an incorrect password', function(done) {
-      db.user.findOne().then(function(user) {
+      User.findOne().then(function(user) {
         if (!user.validPassword('nope')) {
           done();
         } else {
@@ -102,7 +103,7 @@ describe('User instance methods', function() {
 
   describe('toJSON', function() {
     it('should return a user without a password field', function(done) {
-      db.user.findOne().then(function(user) {
+      User.findOne().then(function(user) {
         if (user.toJSON().password === undefined) {
           done();
         } else {
